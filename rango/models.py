@@ -6,6 +6,9 @@ class Category(models.Model):
         views = models.IntegerField(default=0)
         likes = models.IntegerField(default=0)
         slug = models.SlugField(unique=True)
+
+        class Meta:
+                verbose_name_plural = "Categories"
 		
         def save(self, *args, **kwargs):
                 self.slug = slugify(self.name)
@@ -13,16 +16,12 @@ class Category(models.Model):
 
         def __unicode__(self):
                 return self.name
-        
-        class Meta:
-                verbose_name_plural = "Categories"
 
 class Page(models.Model):
     category = models.ForeignKey(Category)
     title = models.CharField(max_length=128)
     url = models.URLField()
     views = models.IntegerField(default=0)
-    slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)

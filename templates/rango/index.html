@@ -17,7 +17,7 @@
                 {% endfor %}
 				<h2>Top 5 most viewed pages:</h2>
                 {% for page in pages %}
-                <li><a href="{{page.url}}">{{ page.slug }}</a></li>
+                <li><a href="{{page.url}}">{{ page.title }}</a></li>
                 {% endfor %}
             </ul>
        {% else %}
