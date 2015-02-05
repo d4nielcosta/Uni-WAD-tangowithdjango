@@ -54,7 +54,7 @@ def populate():
         url="http://flask.pocoo.org",
 		views=45)
 
-    GUID_cat = add_cat("2087521", 64, 12)
+    GUID_cat = add_cat("Rui Costa", 64, 12)
 
     add_page(cat=GUID_cat,
         title="GitHub",
