@@ -58,7 +58,7 @@ def populate():
 
     add_page(cat=GUID_cat,
         title="GitHub",
-        url="https://github.com/2087521d",
+        url="https://github.com/d4nielcosta",
 		views=100)
 
     add_page(cat=GUID_cat,
