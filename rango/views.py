@@ -42,8 +42,8 @@ def index(request):
     response = render(request,'rango/index.html', context_dict)
 
     return response
- 
- 
+
+
 def about(request):
     # If the visits session varible exists, take it and use it.
     # If it doesn't, we haven't visited the site so set the count to zero.
@@ -54,23 +54,23 @@ def about(request):
 
     # remember to include the visit data
     return render(request, 'rango/about.html', {'visits': count})
- 
+
 def category(request, category_name_slug):
- 
+
     context_dict = {}
- 
+
     try:
         category = Category.objects.get(slug=category_name_slug)
         context_dict['category_name'] = category.name
         context_dict['category_name_slug'] = category_name_slug
         pages = Page.objects.filter(category=category)
- 
+
         context_dict['pages'] = pages
         context_dict['category'] = category
-        
+
     except Category.DoesNotExist:
         pass
- 
+
     return render(request, 'rango/category.html', context_dict)
 
 @login_required
@@ -94,7 +94,7 @@ def add_page(request, category_name_slug):
     try:
         cat = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
-                cat = None
+        cat = None
 
     if request.method == 'POST':
         form = PageForm(request.POST)

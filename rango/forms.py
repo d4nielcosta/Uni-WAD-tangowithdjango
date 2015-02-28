@@ -31,7 +31,7 @@ class PageForm(forms.ModelForm):
             cleaned_data['url'] = url
 
         return cleaned_data
-    
+
     class Meta:
         model = Page
         exclude = 'category',
