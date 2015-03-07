@@ -3,22 +3,13 @@ __author__ = 'daniel'
 import json
 import urllib
 import urllib2
+import sys
 
 from tango_with_django_project import keys
 
 
 # Add your BING_API_KEY
 BING_API_KEY = keys.BING_API_KEY
-
-
-if __name__ == '__main__':
-    main()
-
-def main(search_terms):
-    query = run_query(search_terms)
-    print query['rank'], query['title'], query['Url']
-
-
 
 def run_query(search_terms):
     # Specify the base
@@ -82,3 +73,17 @@ def run_query(search_terms):
 
     # Return the list of results to the calling function.
     return results
+
+
+def main(search_terms):
+    results = run_query(search_terms[1])
+    query = []
+    count = 0
+    for r in results:
+        print r['title'] + " | " + r['link']
+        count = count + 1
+        if count >= 10:
+            break
+
+if __name__ == '__main__':
+    main(sys.argv)
