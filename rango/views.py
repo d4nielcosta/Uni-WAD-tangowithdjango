@@ -6,6 +6,7 @@ from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from datetime import datetime
+from rango.bing_search import run_query
 
 def index(request):
 
@@ -54,6 +55,19 @@ def about(request):
 
     # remember to include the visit data
     return render(request, 'rango/about.html', {'visits': count})
+
+def search(request):
+
+    result_list = []
+
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+
+        if query:
+            # Run our Bing function to get the results list!
+            result_list = run_query(query)
+
+    return render(request, 'rango/search.html', {'result_list': result_list})
 
 def category(request, category_name_slug):
 
