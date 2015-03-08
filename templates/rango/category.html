@@ -10,11 +10,11 @@
     <h1>{{ category_name }}</h1>
 </div>
 
-
 {% if category %}
+
 <!-- Search -->
-    {% if user.is_authenticated %}
-    <ul class="list-group">
+{% if user.is_authenticated %}
+<ul class="list-group">
     <form class="form-inline" id="user_form" method="post" action="{% url 'category' category.slug %}">
         {% csrf_token %}
         <!-- Display the search form elements here -->
@@ -27,9 +27,17 @@
     {% if pages %}
 
     {% for page in pages %}
-    <li><a href="{% url 'goto' %}?pageid={{ page.id }}">{{ page.title }}</a></li>
+    <li>
+        <a href="{% url 'goto' %}?pageid={{ page.id }}">{{ page.title }}</a>
+        {% if page.views > 1 %}
+        ({{ page.views }} views)
+        {% elif page.views == 1 %}
+        ({{ page.views }} view)
+        {% endif %}
+    </li>
     {% endfor %}
 </ul>
+
 {% else %}
 <strong>No pages currently in category.</strong>
 {% endif %}
