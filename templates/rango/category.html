@@ -6,26 +6,62 @@
 
 {% block body_block %}
 
-    <div class="page-header">
-                <h1>{{ category_name }}</h1>
-            </div>
+<div class="page-header">
+    <h1>{{ category_name }}</h1>
+</div>
 
-    {% if category %}
-        {% if pages %}
-        <ul class="list-group">
-                {% for page in pages %}
-                <li><a href="{% url 'goto' %}?pageid={{ page.id }}">{{ page.title }}</a></li>
-                {% endfor %}
-                </ul>
-        {% else %}
-                <strong>No pages currently in category.</strong>
-                {% endif %}
 
-        {% if user.is_authenticated %}
-                <a href="/rango/category/{{category.slug}}/add_page/">Add a Page</a>
-                {% endif %}
-        {% else %}
-                 The specified category {{ category_name }} does not exist!
+{% if category %}
+<!-- Search -->
+    {% if user.is_authenticated %}
+    <ul class="list-group">
+    <form class="form-inline" id="user_form" method="post" action="{% url 'category' category.slug %}">
+        {% csrf_token %}
+        <!-- Display the search form elements here -->
+        <input class="form-control" type="text" size="50" name="query" value="{{query}}" id="query" />
+        <input class="btn btn-primary" type="submit" name="submit" value="Search" />
+    </form>
+    <br/>
     {% endif %}
+
+    {% if pages %}
+
+    {% for page in pages %}
+    <li><a href="{% url 'goto' %}?pageid={{ page.id }}">{{ page.title }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<strong>No pages currently in category.</strong>
+{% endif %}
+
+{% if user.is_authenticated %}
+<a href="/rango/category/{{category.slug}}/add_page/">Add a Page</a>
+
+
+{% endif %}
+{% else %}
+The specified category {{ category_name }} does not exist!
+{% endif %}
+
+
+<!-- Search Results -->
+<div class="panel">
+    {% if result_list %}
+    <div class="panel-heading">
+        <h3 class="panel-title">Results</h3>
+        <!-- Display search results in an ordered list -->
+        <div class="panel-body">
+            <div class="list-group">
+                {% for result in result_list %}
+                <div class="list-group-item">
+                    <h4 class="list-group-item-heading"><a href="{{ result.link }}">{{ result.title }}</a></h4>
+                    <p class="list-group-item-text">{{ result.summary }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 
 {% endblock %}
