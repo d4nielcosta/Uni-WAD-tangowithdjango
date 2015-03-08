@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from rango.models import Category, Page
@@ -127,6 +127,21 @@ def add_page(request, category_name_slug):
     context_dict = {'form':form, 'category': cat, 'category_name_slug': category_name_slug}
 
     return render(request, 'rango/add_page.html', context_dict)
+
+def track_url(request):
+
+    if request.method == 'GET':
+        if 'pageid' in request.GET:
+            page_id = request.GET['pageid']
+            accessed_page = Page.objects.get(id=page_id)
+            accessed_page.views += 1
+            accessed_page.save()
+            return redirect(accessed_page.url)
+    return redirect(index)
+
+
+
+
 
 @login_required
 def restricted(request):
