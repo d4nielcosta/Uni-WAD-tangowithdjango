@@ -4,12 +4,16 @@ from django.conf import settings
 from registration.backends.simple.views import RegistrationView
 
 # Create a new class that redirects the user to the index page, if successful at logging
+from rango import views
+
+
 class MyRegistrationView(RegistrationView):
     def get_success_url(selfself,request, user):
         return '/rango/'
 
 
 urlpatterns = patterns('',
+                       url(r'^$', views.index, name='index'), # Extra - Added by me to fix PythonAnywhere
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^rango/', include('rango.urls')),
                        url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),

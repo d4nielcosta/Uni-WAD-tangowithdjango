@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from datetime import datetime
 from rango.bing_search import run_query
+from rango.templatetags.rango_extras import get_category_list
+
 
 def index(request):
 
