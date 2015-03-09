@@ -241,6 +241,20 @@ def users(request):
 
     return render(request, 'rango/users.html', context_dict)
 
+def other_profile(request, user_slug):
+    u = User.objects.get(username=user_slug)
+    context_dict={}
+
+    try:
+        user_profile = UserProfile.objects.get(user=u)
+    except:
+        user_profile = None
+
+    context_dict['user'] = u
+    context_dict['userprofile'] =user_profile
+
+    return render(request, 'rango/other_profile.html', context_dict)
+
 @login_required
 def restricted(request):
     return render(request, 'rango/restricted.html')

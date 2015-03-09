@@ -13,5 +13,6 @@ urlpatterns = patterns('',
                        url(r'edit_profile/', views.edit_profile, name='edit_profile'),
                        url(r'profile/', views.profile, name='profile'),
                        url(r'^goto/', views.track_url, name='goto'),
-                       url(r'^users/', views.users, name='users'),
+                       url(r'^users/(?P<user_slug>[\w\-]+)/$', views.other_profile, name='other_profile'),
+                       url(r'^users/$', views.users, name='users'),
                        )

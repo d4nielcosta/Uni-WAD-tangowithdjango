@@ -13,7 +13,7 @@
     <ul class="list-group">
         {% for user in users %}
         <li class="list-group-item"><a
-                href="{% url 'profile' %}">{{ user.username }}</a></li>
+                href="{{ user.username }}">{{ user.username }}</a></li>
         {% endfor %}
     </ul>
     {% endif %}
