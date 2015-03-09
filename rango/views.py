@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
-from rango.models import Category, Page
+from rango.models import Category, Page, UserProfile
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from datetime import datetime
 from rango.bing_search import run_query
 from rango.templatetags.rango_extras import get_category_list
+from django.contrib.auth.models import User
 
 
 def index(request):
@@ -153,6 +154,43 @@ def track_url(request):
             accessed_page.save()
             return redirect(accessed_page.url)
     return redirect(index)
+
+def register_profile(request):
+    if request.method == 'POST':
+        try:
+            userProfile = UserProfile.objects.get(user=request.user)
+            form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        except:
+            form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            if request.user.is_authenticated():
+                profile = form.save(commit=False)
+                user = User.objects.get(id=request.user.id)
+                profile.user = user
+                try:
+                    profile.picture = request.FILES['picture']
+                except:
+                    pass
+                profile.save()
+        else:
+            print form.errors
+        return index(request)
+    else:
+        form = UserProfileForm(request.GET)
+    return render(request, 'rango/profile_registration.html', {'profile_form': form})
+
+@login_required
+def profile(request):
+    u = User.objects.get(username=request.user.username)
+    context_dict = {}
+    try:
+        user_profile = UserProfile.objects.get(user=u)
+    except:
+        user_profile = None
+
+    context_dict['user'] = u
+    context_dict['userprofile'] = user_profile
+    return render(request, 'rango/profile.html', context_dict)
 
 @login_required
 def restricted(request):
