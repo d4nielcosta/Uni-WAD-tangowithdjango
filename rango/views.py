@@ -179,6 +179,46 @@ def register_profile(request):
         form = UserProfileForm(request.GET)
     return render(request, 'rango/profile_registration.html', {'profile_form': form})
 
+def edit_profile(request):
+    registered = False
+
+    if request.method == "POST":
+
+        try:
+            profile = UserProfile.objects.get(user=request.user)
+            profileForm = UserProfileForm(request.POST, instance = profile)
+        except:
+            profileForm = UserProfileForm(request.POST)
+
+        if profileForm.is_valid():
+
+            if request.user.is_authenticated():
+                profile = profileForm.save(commit=False)
+                user = request.user
+                profile.user = user
+
+                try:
+                    profile.picture = request.FILES['picture']
+                except:
+                    pass
+
+                profile.save()
+                registered = True
+        else:
+            print profileForm.errors
+
+        return index(request)
+
+    else:
+        profileForm = UserProfileForm(request.GET)
+
+    context_dict = {}
+    context_dict['profile'] = profileForm
+    context_dict['registered'] = registered
+
+    return render(request, 'rango/edit_profile.html', context_dict)
+
+
 @login_required
 def profile(request):
     u = User.objects.get(username=request.user.username)
@@ -190,7 +230,16 @@ def profile(request):
 
     context_dict['user'] = u
     context_dict['userprofile'] = user_profile
+
     return render(request, 'rango/profile.html', context_dict)
+
+
+def users(request):
+    context_dict={}
+    otherusers = User.objects.order_by('-username')
+    context_dict['users'] = otherusers
+
+    return render(request, 'rango/users.html', context_dict)
 
 @login_required
 def restricted(request):
