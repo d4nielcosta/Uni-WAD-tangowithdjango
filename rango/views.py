@@ -64,22 +64,22 @@ def search(request):
     result_list = []
 
     if request.method == 'POST':
-        query = request.POST['query'].strip()
+        search_query = request.POST['search_query'].strip()
 
-        if query:
+        if search_query:
             # Run our Bing function to get the results list!
-            result_list = run_query(query)
+            result_list = run_query(search_query)
 
     return render(request, 'rango/search.html', {'result_list': result_list})
 
 def category(request, category_name_slug):
 
     context_dict = {}
-    #context_dict['result_list'] = None
-    #context_dict['query'] = None
-
     if request.method == 'POST':
-        query = request.POST['query'].strip()
+        if "query" in request.POST:
+            query = request.POST['query'].strip()
+        else:
+            query = None
 
         if query:
             # Run our Bing function to get the results list!
@@ -180,8 +180,6 @@ def register_profile(request):
     return render(request, 'rango/profile_registration.html', {'profile_form': form})
 
 def edit_profile(request):
-    registered = False
-
     if request.method == "POST":
 
         try:
@@ -201,9 +199,7 @@ def edit_profile(request):
                     profile.picture = request.FILES['picture']
                 except:
                     pass
-
                 profile.save()
-                registered = True
         else:
             print profileForm.errors
 
@@ -214,7 +210,6 @@ def edit_profile(request):
 
     context_dict = {}
     context_dict['profile'] = profileForm
-    context_dict['registered'] = registered
 
     return render(request, 'rango/edit_profile.html', context_dict)
 
